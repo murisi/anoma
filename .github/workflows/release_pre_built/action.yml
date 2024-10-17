@@ -22,9 +22,11 @@ runs:
       shell: bash
       run: |
         mix deps.get
-        mix escript.install hex protobuf
-        mix escript.build
-        mv anoma anoma_otp_${{ inputs.otp }}
-        shasum -a 1 anoma_otp_${{ inputs.otp }} > anoma-otp-${{ inputs.otp }}.sha1sum
-        shasum -a 256 anoma_otp_${{ inputs.otp }} > anoma-otp-${{ inputs.otp }}.sha256sum
-        echo "$PWD/bin" >> $GITHUB_PATH
+        mix escript.install hex protobuf --force
+        PATH="$HOME/.mix/escripts:$PATH" mix release
+        cd _build/dev/rel/
+        tar czf anoma_otp_${{ inputs.otp }}.tar.gz anoma
+        shasum -a 1 anoma_otp_${{ inputs.otp }}.tar.gz > anoma_otp_${{ inputs.otp }}.tar.gz.sha1sum
+        shasum -a 256 anoma_otp_${{ inputs.otp }}.tar.gz > anoma_otp_${{ inputs.otp }}.tar.gz.sha256sum
+        echo "Hmm $PWD"
+        echo "$PWD" >> $GITHUB_PATH

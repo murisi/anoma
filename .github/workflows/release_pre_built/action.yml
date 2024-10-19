@@ -9,24 +9,51 @@ runs:
   using: "composite"
   steps:
     - uses: erlef/setup-beam@v1.18.2
+      if: startsWith(runner.os, 'Linux') || startsWith(runner.os, 'Windows')
       with:
         otp-version: ${{ inputs.otp_version }}
         elixir-version: "1.17.3"
     - name: Install system dependencies
       shell: bash
-      run: sudo apt-get install -y libsodium-dev
-    - name: Install Protobuf dependencies
+      if: startsWith(runner.os, 'Linux')
+      run: sudo apt install -y libsodium-dev protobuf-compiler
+    - name: Install system dependencies
       shell: bash
-      run: sudo apt install -y protobuf-compiler
-    - name: Build ex_doc
+      if: startsWith(runner.os, 'macOS')
+      run: brew install elixir protobuf
+    - name: Install system dependencies
+      shell: pwsh
+      if: startsWith(runner.os, 'Windows')
+      run: |
+        shasum --help
+        choco install protoc
+        vcpkg install libsodium
+    - name: Install Elixir dependencies
       shell: bash
       run: |
-        mix deps.get
+        mix deps.get --force
         mix escript.install hex protobuf --force
-        PATH="$HOME/.mix/escripts:$PATH" mix release
+    - name: Build Anoma release
+      if: startsWith(runner.os, 'Linux') || startsWith(runner.os, 'macOS')
+      shell: bash
+      run: |
+        export PATH="$PATH:$HOME/.mix/escripts"
+        mix release
         cd _build/dev/rel/
-        tar czf anoma_otp_${{ inputs.otp }}.tar.gz anoma
-        shasum -a 1 anoma_otp_${{ inputs.otp }}.tar.gz > anoma_otp_${{ inputs.otp }}.tar.gz.sha1sum
-        shasum -a 256 anoma_otp_${{ inputs.otp }}.tar.gz > anoma_otp_${{ inputs.otp }}.tar.gz.sha256sum
-        echo "Hmm $PWD"
-        echo "$PWD" >> $GITHUB_PATH
+        tar czf anoma.tar.gz anoma
+        shasum -a 1 anoma.tar.gz > anoma.tar.gz.sha1sum
+        shasum -a 256 anoma.tar.gz > anoma.tar.gz.sha256sum
+    - name: Build Anoma release
+      if: startsWith(runner.os, 'Windows')
+      shell: pwsh
+      run: |
+        & "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\Tools\Launch-VsDevShell.ps1" -Arch amd64 -SkipAutomaticLocation
+        $env:PATH += $env:USERPROFILE + '\.mix\escripts;'
+        $env:INCLUDE += ';' + $env:VCPKG_INSTALLATION_ROOT + '\packages\libsodium_x64-windows\include'
+        $env:LIB += ';' + $env:VCPKG_INSTALLATION_ROOT + '\packages\libsodium_x64-windows\lib'
+        mix release
+        cd _build\dev\rel
+        tar czf anoma.tar.gz anoma
+        Get-FileHash -Path anoma.tar.gz -Algorithm SHA1 | Select-Object Hash | Format-Table -HideTableHeaders | Out-File anoma.tar.gz.sha1sum
+        Get-FileHash -Path anoma.tar.gz -Algorithm SHA256 | Select-Object Hash | Format-Table -HideTableHeaders | Out-File anoma.tar.gz.sha256sum
+        dir

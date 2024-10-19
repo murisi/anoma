@@ -26,12 +26,19 @@ jobs:
   release_pre_built:
     needs: create_release
     strategy:
-      fail-fast: true
+      fail-fast: false
       matrix:
         include:
           - otp: 27
             otp_version: "27.0"
-    runs-on: ubuntu-22.04
+            os: macos-latest
+          - otp: 27
+            otp_version: "27.0"
+            os: ubuntu-latest
+          - otp: 27
+            otp_version: "27.0"
+            os: windows-latest
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -44,11 +51,16 @@ jobs:
       - name: Upload Pre-built
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash
         run: |
           cd _build/dev/rel/
+          export RELEASE_NAME=anoma-${{ github.ref_name }}-${{ runner.os }}-${{ runner.arch }}
+          mv anoma.tar.gz $RELEASE_NAME.tar.gz
+          mv anoma.tar.gz.sha1sum $RELEASE_NAME.tar.gz.sha1sum
+          mv anoma.tar.gz.sha256sum $RELEASE_NAME.tar.gz.sha256sum
           gh release upload --clobber "${{ github.ref_name }}" \
-            anoma_otp_${{ matrix.otp }}.tar.gz \
-            anoma_otp_${{ matrix.otp }}.tar.gz.sha{1,256}sum \
+            $RELEASE_NAME.tar.gz \
+            $RELEASE_NAME.tar.gz.sha{1,256}sum \
   build-docs:
     name: build docs
     runs-on: ubuntu-latest

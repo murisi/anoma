@@ -48,7 +48,8 @@ defmodule Anoma.MixProject do
         include_executables_for: [:unix, :windows],
         applications: [
           anoma_node: :permanent,
-          event_broker: :permanent
+          event_broker: :permanent,
+          ex_unit: :permanent
         ]
       ]
     ]

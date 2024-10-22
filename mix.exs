@@ -43,7 +43,8 @@ defmodule Anoma.MixProject do
         applications: [
           anoma_node: :permanent,
           event_broker: :permanent,
-          anoma_client: :permanent
+          anoma_client: :permanent,
+          ex_unit: :permanent
         ]
       ]
     ]

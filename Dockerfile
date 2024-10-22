@@ -15,7 +15,6 @@ COPY global_deps.exs mix.exs mix.lock version.exs ./
 COPY apps apps
 COPY config config
 COPY documentation documentation
-COPY params params
 # The Hex package manager is required for Mix to fetch dependencies
 RUN mix local.hex --force
 # rebar3 is required to compile Anoma dependencies

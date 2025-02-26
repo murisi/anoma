@@ -210,7 +210,9 @@ defmodule Anoma.Node.Replay.State do
 
         blocks ->
           blocks
-          |> Enum.reduce(default_summary, fn {_, round, txs}, summary ->
+          |> Enum.reduce(default_summary, fn {_, ["anoma", "block", round],
+                                              txs},
+                                             summary ->
             summary
             |> Map.update!(:last_round, &max(round, &1))
             |> Map.update!(:transaction_count, &(&1 + Enum.count(txs)))

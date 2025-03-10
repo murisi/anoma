@@ -54,6 +54,15 @@ Dependencies needed regardless of platform.
    ```shell
    mix escript.install hex protobuf 0.11.0
    ```
+   Note here that the version is important.
+   After installing this plugin, ensure that it is available in your path.
+   If you are using `asdf`, call `asdf reshim`. If not, add `export PATH=~/.mix/escripts:$PATH` to your `.bashrc` or `.zshrc`.
+
+   Verify all is well.
+   ```shell
+   $ protoc-gen-elixir --version
+   0.11.0
+   ```
 
 ----
 #### MacOS

@@ -6,7 +6,7 @@ defmodule Anoma.Node.Examples.EReplay.StartState do
   alias Anoma.Node.Examples.ENode
   alias Anoma.Node.Examples.Mempool, as: EMempool
   alias Anoma.Node.Replay.State
-  alias Anoma.Node.Tables
+  alias Anoma.Tables
   alias Anoma.Node.Registry
   alias Anoma.Node.Logging
   alias Anoma.Node.Event

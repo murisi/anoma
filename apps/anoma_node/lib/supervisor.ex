@@ -13,7 +13,7 @@ defmodule Anoma.Supervisor do
 
   alias Anoma.Node
   alias Anoma.Node.Replay.State
-  alias Anoma.Node.Tables
+  alias Anoma.Tables
 
   ############################################################
   #                       Supervisor Implementation          #
@@ -28,7 +28,7 @@ defmodule Anoma.Supervisor do
   def init(_args) do
     Process.set_label(__MODULE__)
 
-    :ok = Anoma.Node.Tables.initialize_storage()
+    :ok = Anoma.Tables.initialize_storage()
 
     children = [
       {Elixir.Registry, keys: :unique, name: Anoma.Node.Registry},

@@ -14,7 +14,7 @@ defmodule Anoma.Node.Replay.State do
 
   """
 
-  alias Anoma.Node.Tables
+  alias Anoma.Tables
 
   require Logger
 

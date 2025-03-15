@@ -10,7 +10,7 @@ defmodule CommitmentTree do
 
   Fiats that empty subtrees have a hash of 0 for simplicity.
   """
-  alias Anoma.Node.Tables
+  alias Anoma.Tables
 
   use TypedStruct
 

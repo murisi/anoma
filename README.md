@@ -47,7 +47,7 @@ Download the [Anoma release](https://github.com/anoma/anoma/releases) for your p
 ### Build Dependencies
 
 Dependencies needed regardless of platform.
- - Elixir: consult the installation instructions [here]()
+ - Elixir: consult the installation instructions [here](https://elixir-lang.org/install.html)
  - Rust: consult the installation instructions [here](https://www.rust-lang.org/tools/install).
  - Protobuf: consult the installation instructions [here](https://grpc.io/docs/protoc-installation/)
  - Elixir plugin for protobufs `protoc-gen-elixir`

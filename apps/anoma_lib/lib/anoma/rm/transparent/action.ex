@@ -302,7 +302,8 @@ defmodule Anoma.RM.Transparent.Action do
          {:ok, list_consumed} <- Noun.Nounable.List.from_noun(consumed),
          {:ok, proof_map} <- Noun.Nounable.Map.from_noun(rl_proofs),
          {:ok, cu_map} <- Noun.Nounable.MapSet.from_noun(cus),
-         {:ok, appdata} <- Noun.Nounable.Map.from_noun(app_data) do
+         {:ok, appdata} <- Noun.Nounable.Map.from_noun(app_data),
+         lst <- match_appdata(appdata) do
       {:ok,
        %__MODULE__{
          created: list_created |> Enum.map(&Noun.atom_binary_to_integer/1),
@@ -319,12 +320,7 @@ defmodule Anoma.RM.Transparent.Action do
              {:ok, instance} = Instance.from_noun(x)
              instance
            end),
-         app_data:
-           appdata
-           |> Enum.into(%{}, fn {tag, {bin, bool}} ->
-             {Noun.atom_binary_to_integer(tag),
-              {Noun.atom_integer_to_binary(bin), Noun.equal?(bool, 0)}}
-           end)
+         app_data: lst
        }}
     else
       _ -> :error
@@ -340,5 +336,18 @@ defmodule Anoma.RM.Transparent.Action do
       Noun.Nounable.to_noun(t.compliance_units)
       | Noun.Nounable.to_noun(t.app_data)
     ]
+  end
+
+  defp match_appdata(appdata) do
+    Enum.into(appdata, %{}, fn {tag, list} ->
+      {:ok, list_data} = Noun.Nounable.List.from_noun(list)
+
+      list_of_appdata =
+        Enum.map(list_data, fn [bin | bool] ->
+          {Noun.atom_integer_to_binary(bin), Noun.equal?(bool, 0)}
+        end)
+
+      {Noun.atom_binary_to_integer(tag), list_of_appdata}
+    end)
   end
 end

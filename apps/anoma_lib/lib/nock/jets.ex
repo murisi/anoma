@@ -884,10 +884,10 @@ defmodule Nock.Jets do
          {:ok, data} <- Noun.Nounable.Map.from_noun(data),
          con_res <-
            con
-           |> Enum.map(fn [key, res | root] ->
+           |> Enum.map(fn [[size | key], res | root] ->
              {:ok, res} = Resource.from_noun(res)
 
-             {Noun.atom_integer_to_binary(key, 32), res,
+             {Noun.atom_integer_to_binary(key, size), res,
               Noun.atom_binary_to_integer(root)}
            end),
          cre_res <-

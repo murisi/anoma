@@ -27,5 +27,12 @@
   # non-runtime dependencies below
   {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
   {:dialyxir, "~> 1.4", only: [:dev], runtime: false},
-  {:ex_doc, "~> 0.31", only: [:dev], runtime: false}
+  {:ex_doc, "~> 0.31", only: [:dev], runtime: false},
+  {:unclog,
+   git: "https://github.com/m1dnight/unclog",
+   branch: "main",
+   only: [:dev],
+   runtime: false},
+  # for unclog
+  {:parse_trans, "~> 3.4.2"}
 ]

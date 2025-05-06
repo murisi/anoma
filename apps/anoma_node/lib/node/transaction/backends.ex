@@ -527,8 +527,8 @@ defmodule Anoma.Node.Transaction.Backends do
       # TODO: Store ciphertext
 
       cairo_rm_event(
-        MapSet.new(tx.commitments),
-        MapSet.new(tx.nullifiers),
+        MapSet.new(commitments),
+        nullifiers,
         node_id
       )
 

@@ -133,9 +133,9 @@ defmodule Anoma.MixProject do
     [
       extra_applications: [
         :observer,
-        :wx
-      ],
-      included_applications: [:mnesia]
+        :wx,
+        {:mnesia, :optional}
+      ]
     ]
   end
 

@@ -20,7 +20,7 @@ RUN mix local.hex --force
 # rebar3 is required to compile Anoma dependencies
 RUN mix local.rebar --force
 # Protocol Buffers compiler is also required
-RUN mix escript.install hex protobuf --force
+RUN mix escript.install hex protobuf 0.11.0 --force
 # Add the Protocol Buffers compiler to the path
 ENV PATH="/root/.mix/escripts:${PATH}"
 RUN mix clean --deps

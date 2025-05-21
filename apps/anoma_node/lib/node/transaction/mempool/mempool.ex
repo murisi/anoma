@@ -125,6 +125,31 @@ defmodule Anoma.Node.Transaction.Mempool do
     end
   end
 
+  defimpl Noun.Nounable, for: Tx do
+    @impl true
+    def to_noun(t) do
+      tx_result =
+        case t.tx_result do
+          {:ok, noun} -> ["ok" | noun]
+          res -> Noun.Nounable.to_noun(res)
+        end
+
+      vm_result =
+        case t.vm_result do
+          {:ok, noun} -> ["ok" | noun]
+          res -> Noun.Nounable.to_noun(res)
+        end
+
+      backend =
+        case t.backend do
+          {:debug_read_term, _} -> "read"
+          res -> Noun.Nounable.to_noun(res)
+        end
+
+      [tx_result, vm_result, backend | t.code]
+    end
+  end
+
   typedstruct do
     @typedoc """
     I am the type of the Mempool Engine.

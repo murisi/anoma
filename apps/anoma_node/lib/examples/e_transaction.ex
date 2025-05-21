@@ -6,7 +6,7 @@ defmodule Anoma.Node.Examples.ETransaction do
   alias Anoma.Node.Transaction.Mempool
   alias Anoma.Node.Transaction.Ordering
   alias Anoma.Node.Transaction.Storage
-  alias Anoma.Node.Tables
+  alias Anoma.Tables
   alias Anoma.RM.Transparent.Transaction
   alias Examples.ENock
   alias Examples.ETransparent.ETransaction

@@ -48,7 +48,7 @@ defmodule Anoma.Node.Transaction.Storage do
   """
 
   alias Anoma.Node
-  alias Anoma.Node.Tables
+  alias Anoma.Tables
   alias Anoma.Node.Registry
   alias Anoma.Node.Transaction.Storage.Events
 

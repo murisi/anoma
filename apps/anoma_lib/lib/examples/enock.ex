@@ -2273,7 +2273,7 @@ defmodule Examples.ENock do
     cm = consumed |> Resource.commitment_hash()
     root = MapSet.new([cm]) |> CommitmentAccumulator.value()
 
-    consumed_list = Noun.Nounable.to_noun([{<<0::256>>, consumed, root}])
+    consumed_list = Noun.Nounable.to_noun([{{0, 0}, consumed, root}])
     created_list = Noun.Nounable.to_noun([created])
 
     {:ok, res} =

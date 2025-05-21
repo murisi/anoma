@@ -26,6 +26,8 @@ on:
       os:
         required: true
         type: string
+env:
+  ARTIFACT_NAME: anoma-${{ github.ref_name }}-${{ runner.os }}-${{ runner.arch }}
 jobs:
   build_release:
     runs-on: ${{ inputs.os }}
@@ -89,14 +91,14 @@ jobs:
         shell: pwsh
         run: |
           cd _build/dev/rel/
-          tar czf anoma.tar.gz anoma
-          shasum -a 1 anoma.tar.gz > anoma.tar.gz.sha1sum
-          shasum -a 256 anoma.tar.gz > anoma.tar.gz.sha256sum
+          tar czf "$ARTIFACT_NAME.tar.gz" anoma
+          shasum -a 1 "$ARTIFACT_NAME.tar.gz" > "$ARTIFACT_NAME.tar.gz.sha1sum"
+          shasum -a 256 "$ARTIFACT_NAME.tar.gz" > "$ARTIFACT_NAME.tar.gz.sha256sum"
       - name: Create Anoma release artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: anoma-${{ github.ref_name }}-${{ runner.os }}-${{ runner.arch }}
+          name: ${{ env.ARTIFACT_NAME }}
           path: |
-            _build/dev/rel/anoma.tar.gz
-            _build/dev/rel/anoma.tar.gz.sha1sum
-            _build/dev/rel/anoma.tar.gz.sha256sum
+            _build/dev/rel/${{ env.ARTIFACT_NAME }}.tar.gz
+            _build/dev/rel/${{ env.ARTIFACT_NAME }}.tar.gz.sha1sum
+            _build/dev/rel/${{ env.ARTIFACT_NAME }}.tar.gz.sha256sum

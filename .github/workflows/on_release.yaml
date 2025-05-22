@@ -74,6 +74,9 @@ jobs:
           - otp_version: "27.1"
             os: windows-latest
             elixir_version: "1.17"
+          - otp_version: "27.1"
+            os: macos-13
+            elixir_version: "1.17"
     permissions:
       contents: write
       id-token: write

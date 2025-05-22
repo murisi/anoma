@@ -10,7 +10,7 @@ function cp_dylibs {
     # Find all the shared library dependencies of the given object file
     otool -L "$object_file" |
     # Select only those shared libraries that are added to the base system
-    grep -o "/opt/.*dylib" |
+    grep -o -e "/usr/local/opt/.*dylib" -e "/opt/.*dylib" |
     # For each shared library that has been added to the base system
     while read -r shared_library; do
         shared_lib_basename="$(basename $shared_library)"

@@ -8,6 +8,6 @@ anoma() { . "$(dirname "$SELF")/anoma"; }
 # Source the anoma functions but suppress output
 anoma version
 # Make erl's init call the Anoma client entry point
-export ELIXIR_ERL_OPTIONS="-run Elixir.Anoma.Client.CLI start"
+export ELIXIR_ERL_OPTIONS="$ELIXIR_ERL_OPTIONS -run Elixir.Anoma.Client.CLI start"
 # Start the Anoma client
 start "elixir" "$@"

@@ -500,6 +500,10 @@ defmodule Anoma.Node.Tables do
     mnesia_data_dir(:os.type())
   end
 
+  defp mnesia_data_dir({:win32, :nt}) do
+    Path.expand("~/AppData/Anoma")
+  end
+
   defp mnesia_data_dir({:unix, :darwin}) do
     Path.expand("~/Library/Application Support/Anoma")
   end

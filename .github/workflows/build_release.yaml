@@ -63,7 +63,19 @@ jobs:
         run: |
           export PATH="$PATH:$HOME/.mix/escripts"
           mix release
-      - name: Copy shared libraries
+      - name: Build Anoma release
+        if: startsWith(runner.os, 'Windows')
+        shell: pwsh
+        run: |
+          & "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\Tools\Launch-VsDevShell.ps1" -Arch amd64 -SkipAutomaticLocation
+          $env:PATH += $env:USERPROFILE + '\.mix\escripts;' + $env:VCPKG_INSTALLATION_ROOT + '\packages\libsodium_x64-windows\bin'
+          $env:INCLUDE += ';' + $env:VCPKG_INSTALLATION_ROOT + '\packages\libsodium_x64-windows\include'
+          $LIBSODIUM_LIB = $env:VCPKG_INSTALLATION_ROOT + '\packages\libsodium_x64-windows\lib'
+          $env:LIB += ';' + $LIBSODIUM_LIB
+          copy ($LIBSODIUM_LIB + '\libsodium.lib') ($LIBSODIUM_LIB + '\libsodium.dll.a')
+          $env:DEBUG = '1'
+          mix release
+      - name: Copy shared libraries and client
         if: startsWith(runner.os, 'macOS')
         shell: bash
         run: |
@@ -75,18 +87,14 @@ jobs:
         run: |
            ./scripts/copy-sos.sh _build/dev/rel/anoma
            cp ./scripts/anomac _build/dev/rel/anoma/bin/
-      - name: Build Anoma release
+      - name: Copy shared libraries
         if: startsWith(runner.os, 'Windows')
         shell: pwsh
         run: |
-          & "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\Tools\Launch-VsDevShell.ps1" -Arch amd64 -SkipAutomaticLocation
-          $env:PATH += $env:USERPROFILE + '\.mix\escripts;'
-          $env:INCLUDE += ';' + $env:VCPKG_INSTALLATION_ROOT + '\packages\libsodium_x64-windows\include'
-          $LIBSODIUM_LIB = $env:VCPKG_INSTALLATION_ROOT + '\packages\libsodium_x64-windows\lib'
-          $env:LIB += ';' + $LIBSODIUM_LIB
-          copy ($LIBSODIUM_LIB + '\libsodium.lib') ($LIBSODIUM_LIB + '\libsodium.dll.a')
-          $env:DEBUG = '1'
-          mix release
+          $bin_dirs = (ls -Path "_build\dev\rel\anoma\erts-*\bin")
+          foreach($bin_dir in $bin_dirs) {
+            .\scripts\copy-dlls.ps1 -LibPath _build\dev\rel\anoma\lib -DestinationPath $bin_dir.FullName
+          }
       - name: Compute SHA hashes
         shell: pwsh
         run: |

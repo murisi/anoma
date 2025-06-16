@@ -34,7 +34,6 @@ jobs:
         with:
           fetch-depth: 50
       - uses: erlef/setup-beam@v1.18.2
-        if: startsWith(runner.os, 'Linux') || startsWith(runner.os, 'Windows')
         with:
           otp-version: ${{ inputs.otp-version }}
           elixir-version: ${{ inputs.elixir-version }}
@@ -45,7 +44,7 @@ jobs:
       - name: Install system dependencies
         shell: bash
         if: startsWith(runner.os, 'macOS')
-        run: brew install elixir protobuf
+        run: brew install protobuf
       - name: Install system dependencies
         shell: pwsh
         if: startsWith(runner.os, 'Windows')

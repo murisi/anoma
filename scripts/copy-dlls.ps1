@@ -8,7 +8,7 @@ function Copy-Dependencies {
         [string] $RootPath,
         [string] $DestinationPath
     )
-    $excludelist = "C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files\Amazon\cfn-bootstrap\;C:\Users\Administrator\AppData\Local\Microsoft\WindowsApps;" -split ";"
+    $excludelist = "C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files\Amazon\cfn-bootstrap\;C:\Users\runneradmin\AppData\Local\Microsoft\WindowsApps;" -split ";"
     $paths = $env:path -split ";"
     $shared_libs = (dumpbin /dependents $RootPath)
     $libs_start = $shared_libs | select-string -Pattern "^  Image has the following dependencies:$"
@@ -30,6 +30,7 @@ function Copy-Dependencies {
 }
 
 echo $env:path
+& "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\Tools\Launch-VsDevShell.ps1" -Arch amd64 -SkipAutomaticLocation
 $shared_libs = Get-ChildItem -Path $LibPath -Filter *.dll -Recurse
 foreach($shared_lib in $shared_libs) {
     Copy-Dependencies -RootPath $shared_lib.FullName -DestinationPath $DestinationPath
